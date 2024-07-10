@@ -1,5 +1,6 @@
 ﻿namespace Journey.Communication.Responses;
 public class ResponseTripsJson
 {
-    public List<ResponseShortTripJson> Trips { get; set; } = [];
+    // Propriedade Trips, que é uma lista de objetos ResponseShortTripJson. Iniciada como uma lista vazia com "=[]" para não ser null.
+    public List<ResponseShortTripJson> Trips { get; set; } = []; 
 }
