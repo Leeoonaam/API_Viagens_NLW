@@ -5,7 +5,12 @@ Communication: Focado em adaptar e estruturar a comunicação, similar à camada
 Exception: Tratamento de exceções, algo que pode ser considerado uma parte transversal da arquitetura.
 Infrastructure: Lida com a infraestrutura, seguindo o conceito de Frameworks & Drivers.
 
-RESUMO
+# Tecnologias
+
+- C# com ASP.NET Core MVC
+
+# Projeto
+
 - Uso de Caso para ações do controlador
 - StatusCode
 - Exceções Customizadas
