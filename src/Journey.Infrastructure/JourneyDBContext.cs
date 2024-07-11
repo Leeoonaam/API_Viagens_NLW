@@ -17,5 +17,17 @@ namespace Journey.Infrastructure
             // Configura o uso do SQLite e especifica o caminho do banco de dados.
             optionsBuilder.UseSqlite("Data Source=C:\\LC_PROJETOS\\NLW_Journey\\JourneyDatabase.db");
         }
+
+        /// <summary>
+        /// Método para acessar as atividades atraves da tabela (entidade) viagem (trips) não diretamente como link 
+        /// </summary>
+        /// <param name="modelBuilder"></param>
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            // Chama a implementação da classe base do método OnModelCreating
+            base.OnModelCreating(modelBuilder);
+            // Configura a entidade Activity para mapear para a tabela "Activities"
+            modelBuilder.Entity<Activity>().ToTable("Activities");
+        }
     }
 }

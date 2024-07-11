@@ -1,9 +1,14 @@
+using Journey.Api.Filters;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// Adiciona ExceptionFilter ao pipeline MVC
+builder.Services.AddMvc(config => config.Filters.Add(typeof(ExceptionFilter)));
 
 var app = builder.Build();
 

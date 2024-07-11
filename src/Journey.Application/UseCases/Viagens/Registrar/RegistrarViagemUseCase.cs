@@ -49,22 +49,22 @@ namespace Journey.Application.UseCases.Viagens.Registrar
         /// <exception cref="JorneyException"></exception>
         private void Validate(RequestRegisterTripJson request)
         {
-            // Verifica se o nome da viagem está vazio ou é nulo.
-            if (string.IsNullOrWhiteSpace(request.Name))
-            {
-                throw new JorneyException(ArquivoMensagensErro.NOME_VAZIO);// Lança uma exceção customizada se o nome estiver vazio.
-            }
+            // Instancia a classe de validação ValidarRegistroViagem, que contém as regras de validação.
+            var validator = new ValidarRegistroViagem();
 
-            // Verifica se a data de início é menor que a data atual.
-            if (request.StartDate.Date < DateTime.UtcNow.Date)
-            {
-                throw new JorneyException(ArquivoMensagensErro.DATA_INI_MAIOR_HOJE); // Lança uma exceção customizada se a data de início for menor que a data atual.
-            }
+            // Valida o objeto request utilizando as regras definidas na classe ValidarRegistroViagem.
+            // O resultado da validação é armazenado na variável result.
+            var result = validator.Validate(request);
 
-            // Verifica se a data de término é menor que a data de início.
-            if (request.EndDate.Date < request.StartDate.Date)
+            // Verifica se o resultado da validação é inválido (contém erros).
+            if (result.IsValid == false)
             {
-                throw new JorneyException(ArquivoMensagensErro.DATA_FIM_MENOR_DATA_INI); // Lança uma exceção customizada se a data de término for menor que a data de início.
+                // Se a validação falhar, extrai as mensagens de erro da propriedade Errors do resultado da validação,
+                // e converte essas mensagens em uma lista de strings.
+                var ListaMensagensErros = result.Errors.Select(error => error.ErrorMessage).ToList();
+
+                // Lança uma exceção personalizada ErrorOnValidateException contendo a lista de mensagens de erro.
+                throw new ErrorOnValidateException(ListaMensagensErros);
             }
         }
     }
