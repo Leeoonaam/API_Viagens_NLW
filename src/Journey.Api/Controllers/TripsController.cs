@@ -1,4 +1,7 @@
-﻿using Journey.Application.UseCases.Viagens.Deletar;
+﻿using Journey.Application.UseCases.Atividades.Concluida;
+using Journey.Application.UseCases.Atividades.Deleta;
+using Journey.Application.UseCases.Atividades.Registrar;
+using Journey.Application.UseCases.Viagens.Deletar;
 using Journey.Application.UseCases.Viagens.GetAll;
 using Journey.Application.UseCases.Viagens.GetId;
 using Journey.Application.UseCases.Viagens.Registrar;
@@ -19,7 +22,7 @@ namespace Journey.Api.Controllers
         /// <returns></returns>
         [HttpPost]
         [ProducesResponseType(typeof(ResponseShortTripJson),StatusCodes.Status201Created)] //Indica que o método de ação pode retornar uma resposta com o código de status HTTP
-        [ProducesResponseType(typeof(ResponseShortTripJson), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ResponseErrorJson), StatusCodes.Status400BadRequest)]
         public IActionResult Registrar([FromBody] RequestRegisterTripJson request)
         {
             // Instancia o caso de uso para registrar uma viagem.
@@ -53,7 +56,7 @@ namespace Journey.Api.Controllers
         [HttpGet]
         [Route("{id}")]
         [ProducesResponseType(typeof(ResponseTripJson), StatusCodes.Status200OK)]//Indica que o método de ação pode retornar uma resposta com o código de status HTTP
-        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ResponseErrorJson), StatusCodes.Status404NotFound)]
         public IActionResult RecuperarViagenID([FromRoute]Guid id)
         {
             // Instancia o caso de uso para recuperar uma viagem pelo ID.
@@ -67,7 +70,7 @@ namespace Journey.Api.Controllers
         [HttpDelete]
         [Route("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]//Indica que o método de ação pode retornar uma resposta com o código de status HTTP
-        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ResponseErrorJson), StatusCodes.Status404NotFound)]
         public IActionResult Deletar([FromRoute] Guid id)
         {
             // Instancia o caso de uso para deletar uma viagem pelo ID.
@@ -75,6 +78,46 @@ namespace Journey.Api.Controllers
             // Executa o caso de uso passando o ID recebido.
             usecase.Execute(id);
             // Retorna uma resposta HTTP 204 (No Content) indicando que a operação foi bem-sucedida e não há conteúdo a ser retornado.
+            return NoContent();
+        }
+
+        [HttpPost]
+        [Route("{viagemId}/atividades")]
+        [ProducesResponseType(typeof(ResponseActivityJson), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ResponseErrorJson), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ResponseErrorJson), StatusCodes.Status404NotFound)]
+        public IActionResult RegistrarAtividadeViagem([FromRoute] Guid viagemId, [FromBody]RequestRegisterActivityJson request)
+        {
+            var useCase = new RegistrarAtividadeViagemUseCase();
+
+            var response = useCase.Execute(viagemId, request);
+
+            return Created(string.Empty, response);
+        }
+
+        [HttpPut]
+        [Route("{viagemId}/atividades/{atividadeId}/Atualiza")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(ResponseErrorJson), StatusCodes.Status404NotFound)]
+        public IActionResult AtualizaAtividade([FromRoute] Guid viagemId, [FromRoute]Guid atividadeId ,[FromBody] RequestRegisterActivityJson request)
+        {
+            var useCase = new ConcluiAtividadeViagemUseCase();
+
+            useCase.Execute(viagemId, atividadeId);
+
+            return NoContent();
+        }
+
+        [HttpDelete]
+        [Route("{viagemId}/atividades/{atividadeId}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(ResponseErrorJson), StatusCodes.Status404NotFound)]
+        public IActionResult DeletaAtividade([FromRoute] Guid viagemId, [FromRoute] Guid atividadeId, [FromBody] RequestRegisterActivityJson request)
+        {
+            var useCase = new DeletaAtividadeViagemUseCase();
+
+            useCase.Execute(viagemId, atividadeId);
+
             return NoContent();
         }
     }
