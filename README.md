@@ -1,6 +1,7 @@
 # Journey
 
-![image](https://github.com/Leeoonaam/API_Viagens_NLW/assets/97477931/61b4fe65-bf81-4156-bf87-9b8daf24e5c2)
+![image](https://github.com/user-attachments/assets/71641c2f-fc03-422e-898b-eebd596243ba)
+
 
 # Tecnologias
 
